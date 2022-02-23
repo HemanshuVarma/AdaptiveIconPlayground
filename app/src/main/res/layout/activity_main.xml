@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2017 Google Inc.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -13,8 +12,7 @@
   the License.
   -->
 
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -22,14 +20,14 @@
     android:fitsSystemWindows="false"
     tools:context=".MainActivity">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/grid_bottom_padding"
         android:paddingTop="24dp"
+        android:paddingBottom="@dimen/grid_bottom_padding"
         android:scrollbarStyle="insideOverlay"
         android:scrollbars="vertical|horizontal"
         app:layoutManager="GridLayoutManager"
@@ -42,7 +40,7 @@
         android:layout_gravity="center"
         android:indeterminate="true" />
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/settings_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,12 +50,12 @@
         app:behavior_peekHeight="@dimen/sheet_peek"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="@bool/settings_sheet_fits_windows"
-            android:paddingBottom="64dp"
-            android:paddingTop="16dp">
+            android:paddingTop="16dp"
+            android:paddingBottom="64dp">
 
             <ImageButton
                 android:id="@+id/mask"
@@ -108,9 +106,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:max="20"
-                android:paddingBottom="16dp"
                 android:paddingHorizontal="16dp"
                 android:paddingTop="8dp"
+                android:paddingBottom="16dp"
                 android:progress="10"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/foreground_parallax_label" />
@@ -130,9 +128,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:max="20"
-                android:paddingBottom="16dp"
                 android:paddingHorizontal="16dp"
                 android:paddingTop="8dp"
+                android:paddingBottom="16dp"
                 android:progress="8"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/background_parallax_label" />
@@ -152,9 +150,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:max="50"
-                android:paddingBottom="16dp"
                 android:paddingHorizontal="16dp"
                 android:paddingTop="8dp"
+                android:paddingBottom="16dp"
                 android:progress="20"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/foreground_scale_label" />
@@ -174,9 +172,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:max="50"
-                android:paddingBottom="16dp"
                 android:paddingHorizontal="16dp"
                 android:paddingTop="8dp"
+                android:paddingBottom="16dp"
                 android:progress="30"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/background_scale_label" />
@@ -197,9 +195,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:max="3000"
-                android:paddingBottom="16dp"
                 android:paddingHorizontal="16dp"
                 android:paddingTop="8dp"
+                android:paddingBottom="16dp"
                 android:progress="500"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/stiffness_label" />
@@ -219,15 +217,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:max="100"
-                android:paddingBottom="16dp"
                 android:paddingHorizontal="16dp"
                 android:paddingTop="8dp"
+                android:paddingBottom="16dp"
                 android:progress="30"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/damping_label" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

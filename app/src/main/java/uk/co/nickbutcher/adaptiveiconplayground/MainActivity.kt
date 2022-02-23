@@ -15,23 +15,24 @@
 package uk.co.nickbutcher.adaptiveiconplayground
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.os.Bundle
-import android.support.animation.FloatPropertyCompat
-import android.support.animation.SpringAnimation
-import android.support.annotation.ColorInt
-import android.support.annotation.DrawableRes
-import android.support.annotation.FloatRange
-import android.support.design.widget.BottomSheetBehavior
-import android.support.v4.app.LoaderManager
-import android.support.v4.content.AsyncTaskLoader
-import android.support.v4.content.Loader
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.dynamicanimation.animation.FloatPropertyCompat
+import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
+import androidx.annotation.FloatRange
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import androidx.loader.app.LoaderManager
+import androidx.loader.content.AsyncTaskLoader
+import androidx.loader.content.Loader
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.transition.ChangeBounds
 import android.transition.Fade
 import android.transition.TransitionManager
@@ -97,78 +98,87 @@ class MainActivity : AppCompatActivity() {
         get() = adapter?.iconCornerRadius ?: 0f
         set(value) {
             applyGridProperty(
-                    { ad -> ad.iconCornerRadius = value },
-                    { iv -> iv.cornerRadius = value })
+                { ad -> ad.iconCornerRadius = value },
+                { iv -> iv.cornerRadius = value })
         }
 
     private var velocityX = 0f
         set(value) {
             applyGridProperty(
-                    { ad -> ad.velocityX = value },
-                    { iv -> iv.velocityX = value })
+                { ad -> ad.velocityX = value },
+                { iv -> iv.velocityX = value })
         }
 
     private var velocityY = 0f
         set(value) {
             applyGridProperty(
-                    { ad -> ad.velocityY = value },
-                    { iv -> iv.velocityY = value })
+                { ad -> ad.velocityY = value },
+                { iv -> iv.velocityY = value })
         }
 
     private var foregroundTranslateFactor
         get() = adapter?.foregroundTranslateFactor ?: DEF_FOREGROUND_TRANSLATE_FACTOR
         set(value) {
             applyGridProperty(
-                    { ad -> ad.foregroundTranslateFactor = value },
-                    { iv -> iv.foregroundTranslateFactor = value })
+                { ad -> ad.foregroundTranslateFactor = value },
+                { iv -> iv.foregroundTranslateFactor = value })
         }
 
     private var backgroundTranslateFactor
         get() = adapter?.backgroundTranslateFactor ?: DEF_BACKGROUND_TRANSLATE_FACTOR
         set(value) {
             applyGridProperty(
-                    { ad -> ad.backgroundTranslateFactor = value },
-                    { iv -> iv.backgroundTranslateFactor = value })
+                { ad -> ad.backgroundTranslateFactor = value },
+                { iv -> iv.backgroundTranslateFactor = value })
         }
 
     private var foregroundScaleFactor
         get() = adapter?.foregroundScaleFactor ?: DEF_FOREGROUND_SCALE_FACTOR
         set(value) {
             applyGridProperty(
-                    { ad -> ad.foregroundScaleFactor = value },
-                    { iv -> iv.foregroundScaleFactor = value })
+                { ad -> ad.foregroundScaleFactor = value },
+                { iv -> iv.foregroundScaleFactor = value })
         }
 
     private var backgroundScaleFactor
         get() = adapter?.backgroundScaleFactor ?: DEF_BACKGROUND_SCALE_FACTOR
         set(value) {
             applyGridProperty(
-                    { ad -> ad.backgroundScaleFactor = value },
-                    { iv -> iv.backgroundScaleFactor = value })
+                { ad -> ad.backgroundScaleFactor = value },
+                { iv -> iv.backgroundScaleFactor = value })
         }
 
+    @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val res = resources
 
         findViewById<View>(android.R.id.content).systemUiVisibility =
-                (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
+            (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
         grid.setHasFixedSize(true)
-        grid.addItemDecoration(CenteringDecoration(res.getInteger(R.integer.spans),
-                res.getDimensionPixelSize(R.dimen.icon_size)))
+        grid.addItemDecoration(
+            CenteringDecoration(
+                res.getInteger(R.integer.spans),
+                res.getDimensionPixelSize(R.dimen.icon_size)
+            )
+        )
 
         val fastOutSlowIn = AnimationUtils.loadInterpolator(
-                this, android.R.interpolator.fast_out_slow_in)
+            this, android.R.interpolator.fast_out_slow_in
+        )
         findViewById<View>(R.id.mask).setOnClickListener {
             corner = ++corner % corners.size
-            with(ObjectAnimator.ofFloat(
+            with(
+                ObjectAnimator.ofFloat(
                     this@MainActivity,
                     ICON_CORNER_RADIUS,
-                    corners[corner])) {
+                    corners[corner]
+                )
+            ) {
                 duration = 200L
                 interpolator = fastOutSlowIn
                 start()
@@ -186,10 +196,10 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.orientation).setOnClickListener { view ->
             orientation = orientation xor 1
             view.animate()
-                    .rotation(if (orientation == VERTICAL) 90f else 0f)
-                    .setDuration(160L)
-                    .setInterpolator(fastOutSlowIn)
-                    .start()
+                .rotation(if (orientation == VERTICAL) 90f else 0f)
+                .setDuration(160L)
+                .setInterpolator(fastOutSlowIn)
+                .start()
             TransitionManager.beginDelayedTransition(grid, reorient)
             (grid.layoutManager as GridLayoutManager).orientation = orientation
         }
@@ -205,47 +215,52 @@ class MainActivity : AppCompatActivity() {
                     systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
                 } else {
                     systemUiVisibility =
-                            systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+                        systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
                 }
             }
         }
 
         findViewById<SeekBar>(R.id.foreground_parallax)
-                .onSeek { progress -> foregroundTranslateFactor = progress / 100f }
+            .onSeek { progress -> foregroundTranslateFactor = progress / 100f }
         findViewById<SeekBar>(R.id.background_parallax)
-                .onSeek { progress -> backgroundTranslateFactor = progress / 100f }
+            .onSeek { progress -> backgroundTranslateFactor = progress / 100f }
         findViewById<SeekBar>(R.id.foreground_scale)
-                .onSeek { progress -> foregroundScaleFactor = progress / 100f }
+            .onSeek { progress -> foregroundScaleFactor = progress / 100f }
         findViewById<SeekBar>(R.id.background_scale)
-                .onSeek { progress -> backgroundScaleFactor = progress / 100f }
+            .onSeek { progress -> backgroundScaleFactor = progress / 100f }
 
         BottomSheetBehavior.from(findViewById<View>(R.id.settings_sheet)).setBottomSheetCallback(
-                object : BottomSheetBehavior.BottomSheetCallback() {
-                    override fun onStateChanged(bottomSheet: View, newState: Int) {}
+            object : BottomSheetBehavior.BottomSheetCallback() {
+                override fun onStateChanged(bottomSheet: View, newState: Int) {}
 
-                    override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                        // make the sheet more opaque [80%–95%] as it slides up
-                        val alpha = 204 + (38 * slideOffset).toInt()
-                        val color = 0xccffffff.toInt() and 0x00ffffff or (alpha shl 24)
-                        bottomSheet.setBackgroundColor(color)
-                    }
-                })
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                    // make the sheet more opaque [80%–95%] as it slides up
+                    val alpha = 204 + (38 * slideOffset).toInt()
+                    val color = 0xccffffff.toInt() and 0x00ffffff or (alpha shl 24)
+                    bottomSheet.setBackgroundColor(color)
+                }
+            })
 
         supportLoaderManager.initLoader(0, Bundle.EMPTY,
-                object : LoaderManager.LoaderCallbacks<List<AdaptiveIconDrawable>> {
-                    override fun onCreateLoader(id: Int, args: Bundle) =
-                            AdaptiveIconLoader(applicationContext)
+            object : LoaderManager.LoaderCallbacks<List<AdaptiveIconDrawable>> {
+                override fun onCreateLoader(
+                    id: Int,
+                    args: Bundle?
+                ): Loader<List<AdaptiveIconDrawable>> =
+                    AdaptiveIconLoader(applicationContext)
 
-                    override fun onLoadFinished(loader: Loader<List<AdaptiveIconDrawable>>,
-                                                data: List<AdaptiveIconDrawable>) {
-                        findViewById<View>(R.id.loading).visibility = GONE
-                        adapter = IconAdapter(data, corners[0])
-                        grid.adapter = adapter
-                        grid.setOnTouchListener(gridTouch)
-                    }
+                override fun onLoadFinished(
+                    loader: Loader<List<AdaptiveIconDrawable>>,
+                    data: List<AdaptiveIconDrawable>
+                ) {
+                    findViewById<View>(R.id.loading).visibility = GONE
+                    adapter = IconAdapter(data, corners[0])
+                    grid.adapter = adapter
+                    grid.setOnTouchListener(gridTouch)
+                }
 
-                    override fun onLoaderReset(loader: Loader<List<AdaptiveIconDrawable>>) {}
-                })
+                override fun onLoaderReset(loader: Loader<List<AdaptiveIconDrawable>>) {}
+            })
     }
 
     private fun releaseVelocity(releaseVelocityX: Float, releaseVelocityY: Float) {
@@ -271,18 +286,19 @@ class MainActivity : AppCompatActivity() {
      * Helper function for setting a property on both the adapter and on all views in the grid
      */
     private inline fun applyGridProperty(
-            adapterAction: (IconAdapter) -> Unit,
-            iconViewAction: (AdaptiveIconView) -> Unit) {
+        adapterAction: (IconAdapter) -> Unit,
+        iconViewAction: (AdaptiveIconView) -> Unit
+    ) {
         adapter?.let {
             adapterAction(it)
             (0 until grid.childCount)
-                    .map { grid.getChildAt(it) as AdaptiveIconView }
-                    .forEach { iconViewAction(it) }
+                .map { grid.getChildAt(it) as AdaptiveIconView }
+                .forEach { iconViewAction(it) }
         }
     }
 
-    private class AdaptiveIconLoader(context: Context)
-        : AsyncTaskLoader<List<AdaptiveIconDrawable>>(context) {
+    private class AdaptiveIconLoader(context: Context) :
+        AsyncTaskLoader<List<AdaptiveIconDrawable>>(context) {
 
         private val icons = ArrayList<AdaptiveIconDrawable>()
 
@@ -312,15 +328,15 @@ class MainActivity : AppCompatActivity() {
             return adaptiveIcons
         }
 
-        override fun deliverResult(data: List<AdaptiveIconDrawable>) {
-            icons += data
+        override fun deliverResult(data: List<AdaptiveIconDrawable>?) {
+            icons += data!!
             super.deliverResult(data)
         }
     }
 
     private class IconAdapter(
-            private val adaptiveIcons: List<AdaptiveIconDrawable>,
-            var iconCornerRadius: Float
+        private val adaptiveIcons: List<AdaptiveIconDrawable>,
+        var iconCornerRadius: Float
     ) : RecyclerView.Adapter<IconViewHolder>() {
 
         var velocityX = 0f
@@ -331,8 +347,10 @@ class MainActivity : AppCompatActivity() {
         var backgroundScaleFactor = DEF_BACKGROUND_SCALE_FACTOR
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-                IconViewHolder(LayoutInflater.from(parent.context)
-                        .inflate(R.layout.icon, parent, false))
+            IconViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.icon, parent, false)
+            )
 
         override fun onBindViewHolder(holder: IconViewHolder, position: Int) {
             holder.icon.apply {
@@ -359,10 +377,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private enum class Decor(
-            @DrawableRes val background: Int,
-            @ColorInt val status: Int,
-            val darkStatusIcons: Boolean,
-            @DrawableRes val icon: Int) {
+        @DrawableRes val background: Int,
+        @ColorInt val status: Int,
+        val darkStatusIcons: Boolean,
+        @DrawableRes val icon: Int
+    ) {
 
         Wallpaper(R.drawable.wallpaper, 0x99000000.toInt(), false, R.drawable.ic_wallpaper),
         Light(R.drawable.wallpaper_light, 0xb3eeeeee.toInt(), true, R.drawable.ic_light),
@@ -373,15 +392,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private class CenteringDecoration(
-            private val spanCount: Int,
-            private val iconSize: Int
+        private val spanCount: Int,
+        private val iconSize: Int
     ) : RecyclerView.ItemDecoration() {
 
         private val offsets = Rect()
         private var initialized = false
 
-        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView,
-                                    state: RecyclerView.State?) {
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
             if (!initialized) calculateOffsets(parent)
             outRect.set(offsets)
         }
@@ -401,7 +424,8 @@ class MainActivity : AppCompatActivity() {
 
         setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) =
-                    progressChanged(progress)
+                progressChanged(progress)
+
             override fun onStartTrackingTouch(seekBar: SeekBar) = Unit
             override fun onStopTrackingTouch(seekBar: SeekBar) = Unit
         })
@@ -422,8 +446,10 @@ class MainActivity : AppCompatActivity() {
         private val ICON_CORNER_RADIUS = object : FloatProperty<MainActivity>("iconCornerRadius") {
             override fun get(activity: MainActivity) = activity.iconCornerRadius
 
-            override fun setValue(activity: MainActivity,
-                                  @FloatRange(from = 0.0) cornerRadius: Float) {
+            override fun setValue(
+                activity: MainActivity,
+                @FloatRange(from = 0.0) cornerRadius: Float
+            ) {
                 activity.iconCornerRadius = cornerRadius
             }
         }

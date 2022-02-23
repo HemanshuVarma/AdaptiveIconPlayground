@@ -24,8 +24,8 @@ import android.graphics.Paint
 import android.graphics.Shader.TileMode.CLAMP
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
-import android.support.annotation.FloatRange
-import android.support.annotation.Keep
+import androidx.annotation.FloatRange
+import androidx.annotation.Keep
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
@@ -41,8 +41,8 @@ import kotlin.reflect.KProperty
  * allows animation of the corner radius.
  */
 class AdaptiveIconView(
-        context: Context,
-        attrs: AttributeSet?
+    context: Context,
+    attrs: AttributeSet?
 ) : View(context, attrs, R.attr.adaptiveIconViewStyle) {
 
     private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -65,6 +65,7 @@ class AdaptiveIconView(
     private var foregroundScale by InvalidateDelegate(0f)
 
     var cornerRadius by InvalidateDelegate(0f)
+
     // scale & translate factors [0,1]
     var foregroundTranslateFactor by FloatRangeDelegate(0f)
     var backgroundTranslateFactor by FloatRangeDelegate(0f)
@@ -82,6 +83,7 @@ class AdaptiveIconView(
             backgroundDy = backgroundTranslateFactor * displacementY
             foregroundDy = foregroundTranslateFactor * displacementY
         }
+
     @Keep // called by @animator/scale
     var scale = 0f
         set(@FloatRange(from = 0.0, to = 1.0) value) {
@@ -94,7 +96,8 @@ class AdaptiveIconView(
 
     init {
         val a = context.obtainStyledAttributes(
-                attrs, R.styleable.AdaptiveIconView, R.attr.adaptiveIconViewStyle, 0)
+            attrs, R.styleable.AdaptiveIconView, R.attr.adaptiveIconViewStyle, 0
+        )
         val shadowColor = a.getColor(R.styleable.AdaptiveIconView_shadowColor, Color.TRANSPARENT)
         shadowDY = a.getDimension(R.styleable.AdaptiveIconView_shadowDy, 0f)
         a.recycle()
@@ -103,8 +106,11 @@ class AdaptiveIconView(
                 color = shadowColor
             }
         }
-        layerSize = Math.round(TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 108f, context.resources.displayMetrics))
+        layerSize = Math.round(
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 108f, context.resources.displayMetrics
+            )
+        )
         layerCenter = (layerSize / 2).toFloat()
         iconSize = (layerSize / (1 + 2 * AdaptiveIconDrawable.getExtraInsetFraction())).toInt()
         viewportOffset = (layerSize - iconSize) / 2
@@ -140,14 +146,20 @@ class AdaptiveIconView(
             translate(left, top)
             if (shadowPaint != null) {
                 translate(0f, shadowDY)
-                drawRoundRect(0f, 0f, iconSize.toFloat(), iconSize.toFloat(),
-                        cornerRadius, cornerRadius, shadowPaint)
+                drawRoundRect(
+                    0f, 0f, iconSize.toFloat(), iconSize.toFloat(),
+                    cornerRadius, cornerRadius, shadowPaint!!
+                )
                 translate(0f, -shadowDY)
             }
-            drawRoundRect(0f, 0f, iconSize.toFloat(), iconSize.toFloat(),
-                    cornerRadius, cornerRadius, backgroundPaint)
-            drawRoundRect(0f, 0f, iconSize.toFloat(), iconSize.toFloat(),
-                    cornerRadius, cornerRadius, foregroundPaint)
+            drawRoundRect(
+                0f, 0f, iconSize.toFloat(), iconSize.toFloat(),
+                cornerRadius, cornerRadius, backgroundPaint
+            )
+            drawRoundRect(
+                0f, 0f, iconSize.toFloat(), iconSize.toFloat(),
+                cornerRadius, cornerRadius, foregroundPaint
+            )
             restoreToCount(saveCount)
         }
     }
@@ -192,9 +204,10 @@ private class InvalidateDelegate<T : Any>(var value: T) {
  * A [Float] Delegate which constrains its value between a minimum and maximum.
  */
 private class FloatRangeDelegate(
-        var value: Float,
-        val min: Float = 0f,
-        val max: Float = 1f) {
+    var value: Float,
+    val min: Float = 0f,
+    val max: Float = 1f
+) {
     operator fun getValue(thisRef: Any?, property: KProperty<*>) = value
     operator fun setValue(thisRef: Any?, property: KProperty<*>, value: Float) {
         this.value = value.coerceIn(min, max)
